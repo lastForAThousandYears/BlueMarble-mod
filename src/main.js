@@ -635,8 +635,8 @@ function buildOverlayMain() {
         }).buildElement()
       .buildElement()
       .addTextarea({'id': overlayMain.outputStatusId, 'placeholder': `Status: Sleeping...\nVersion: ${version}`, 'readOnly': true}).buildElement()
-      .addDiv({'id': 'bm-contain-buttons-action'})
-        .addDiv()
+      .addDiv({'id': 'bm-contain-buttons-action', 'style': 'display: flex; flex-direction: row; justify-content: space-between; align-items: center;'})
+        .addDiv({'style': 'display: inline-flex; gap: 0.5ch; flex: 0 0 auto;'})
           // .addButton({'id': 'bm-button-teleport', 'className': 'bm-help', 'textContent': '✈'}).buildElement()
           // .addButton({'id': 'bm-button-favorite', 'className': 'bm-help', 'innerHTML': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="10,2 12,7.5 18,7.5 13.5,11.5 15.5,18 10,14 4.5,18 6.5,11.5 2,7.5 8,7.5" fill="white"></polygon></svg>'}).buildElement()
           // .addButton({'id': 'bm-button-templates', 'className': 'bm-help', 'innerHTML': '🖌'}).buildElement()
@@ -653,7 +653,10 @@ function buildOverlayMain() {
             });
           }).buildElement()
         .buildElement()
-        .addSmall({'textContent': 'Made by SwingTheVine', 'style': 'margin-top: auto;'}).buildElement()
+        .addDiv({'style': 'display: inline-flex; flex-direction: column; align-items: flex-end; gap: 0; flex: 0 0 auto;'})
+          .addSmall({'textContent': 'Made by SwingTheVine', 'style': 'display: block;'}).buildElement()
+          .addSmall({'textContent': 'Modded by lastforathousandyears', 'style': 'display: block;'}).buildElement()
+        .buildElement()
       .buildElement()
     .buildElement()
   .buildOverlay(document.body);

@@ -118,8 +118,10 @@ export default class TemplateManager {
               const [
                 templatePixelR, templatePixelG, templatePixelB, templatePixelA
               ] = tData.slice(templatePixelCenter, templatePixelCenter + 4); // Shread block's center pixel's RED value
+              const isDeface = templatePixelA === 32;
               
-              const keyCandidate = `${templatePixelR},${templatePixelG},${templatePixelB}`;
+              const keyCandidate = isDeface ? '222,250,206'
+              : `${templatePixelR},${templatePixelG},${templatePixelB}`;
 
               const rgbKey = (activeTemplate?.allowedColorsSet && activeTemplate.allowedColorsSet.has(keyCandidate)) ? keyCandidate : 'other';
               const wrongColorArr = wrongColors?.get(rgbKey) || [];
@@ -132,10 +134,6 @@ export default class TemplateManager {
               const realPixelG = tilePixels[realPixelCenter + 1];
               const realPixelB = tilePixels[realPixelCenter + 2];
               const realPixelA = tilePixels[realPixelCenter + 3];
-              const isDeface = 
-                              templatePixelR === 0xDE &&
-                              templatePixelG === 0xFA &&
-                              templatePixelB === 0xCE;
               const pixel_coords = `${tileKey.split(',').join(', ')} | ${Number(template.pixelCoords[0]) + (x - 1) / drawMult}, ${Number(template.pixelCoords[1]) + (y - 1) / drawMult}`;
 
               if (isDeface && realPixelA < 64) {
@@ -147,12 +145,13 @@ export default class TemplateManager {
               } else if (realPixelA < 64) {
                 // Unpainted
                 //if (wrongColorArr.length < 100) {
-                  wrongColorArr.push(pixel_coords);
-                  wrongColors.set(rgbKey, wrongColorArr);
+                //  wrongColorArr.push(pixel_coords);
+                //  wrongColors.set(rgbKey, wrongColorArr);
                 //}
               } else if (realPixelR === templatePixelR && 
                 realPixelG === templatePixelG && 
-                realPixelB === templatePixelB
+                realPixelB === templatePixelB &&
+                !isDeface // !isDeface is workaround for one bug
               ) {
                 paintedCount++; // ...the pixel is painted correctly
                 // Track painted count for this specific color key
@@ -161,10 +160,10 @@ export default class TemplateManager {
                 } catch (_) { /* no-op */ }
               } else {
                 wrongCount++; // ...the pixel is NOT painted correctly
-                //if (wrongColorArr.length < 100) {
+                if (wrongColorArr.length < 100) {
                   wrongColorArr.push(pixel_coords);
                   wrongColors.set(rgbKey, wrongColorArr);
-                //}
+                }
               }
             }
           }
