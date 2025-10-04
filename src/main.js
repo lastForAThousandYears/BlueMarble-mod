@@ -18,12 +18,12 @@ const consoleStyle = 'color: cornflowerblue;'; // The styling for the console lo
  * @since 0.11.15
  */
 function inject(callback) {
-    const script = document.createElement('script');
-    script.setAttribute('bm-name', name); // Passes in the name value
-    script.setAttribute('bm-cStyle', consoleStyle); // Passes in the console style value
-    script.textContent = `(${callback})();`;
-    document.documentElement?.appendChild(script);
-    script.remove();
+  const script = document.createElement('script');
+  script.setAttribute('bm-name', name); // Passes in the name value
+  script.setAttribute('bm-cStyle', consoleStyle); // Passes in the console style value
+  script.textContent = `(${callback})();`;
+  document.documentElement?.appendChild(script);
+  script.remove();
 }
 
 /** What code to execute instantly in the client (webpage) to spy on fetch calls.
@@ -186,6 +186,7 @@ console.log(storageTemplates);
 templateManager.importJSON(storageTemplates); // Loads the templates
 
 const userSettings = JSON.parse(GM_getValue('bmUserSettings', '{}')); // Loads the user settings
+let hidePainted = userSettings.hidePainted || false;
 console.log(userSettings);
 console.log(Object.keys(userSettings).length);
 if (Object.keys(userSettings).length == 0) {
@@ -274,8 +275,8 @@ function buildOverlayMain() {
       GM.setValue('bmCoords', JSON.stringify(data));
     } catch (_) {}
   };
-  
-  overlayMain.addDiv({'id': 'bm-overlay', 'style': 'top: 10px; right: 75px;'})
+
+  overlayMain.addDiv({'id': 'bm-overlay', 'style': 'top: 10px; right: 75px; width: fit-content; max-width: 90vw;'})
     .addDiv({'id': 'bm-contain-header'})
       .addDiv({'id': 'bm-bar-drag'}).buildElement()
       .addImg({'alt': 'Blue Marble Icon - Click to minimize/maximize', 'src': 'https://raw.githubusercontent.com/SwingTheVine/Wplace-BlueMarble/main/dist/assets/Favicon.png', 'style': 'cursor: pointer;'}, 
@@ -313,9 +314,9 @@ function buildOverlayMain() {
             // Pre-restore original dimensions when switching to maximized state
             // This ensures smooth transition and prevents layout issues
             if (!isMinimized) {
-              overlay.style.width = "auto";
-              overlay.style.maxWidth = "300px";
-              overlay.style.minWidth = "200px";
+              overlay.style.width = "fit-content";
+              overlay.style.maxWidth = "90vw";
+              overlay.style.minWidth = "260px";
               overlay.style.padding = "10px";
             }
             
@@ -457,9 +458,10 @@ function buildOverlayMain() {
                 dragBar.style.marginBottom = '0.5em';
               }
               
-              // Remove all fixed dimensions to allow responsive behavior
-              // This ensures the overlay can adapt to content changes
-              overlay.style.width = '';
+              // Restore responsive dimensions sized to content
+              overlay.style.width = 'fit-content';
+              overlay.style.maxWidth = '90vw';
+              overlay.style.minWidth = '260px';
               overlay.style.height = '';
             }
             
@@ -551,8 +553,8 @@ function buildOverlayMain() {
       .buildElement()
       // Color filter UI
       .addDiv({'id': 'bm-contain-colorfilter', 'style': 'max-height: 140px; overflow: auto; border: 1px solid rgba(255,255,255,0.1); padding: 4px; border-radius: 4px; display: none;'})
-        .addDiv({'style': 'display: flex; gap: 6px; margin-bottom: 6px;'})
-          .addButton({'id': 'bm-button-colors-enable-all', 'textContent': 'Enable All'}, (instance, button) => {
+        .addDiv({'style': 'display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: nowrap;'})
+          .addButton({'id': 'bm-button-colors-enable-all', 'textContent': 'Enable All', 'style': 'white-space: nowrap;'}, (instance, button) => {
             button.onclick = () => {
               const t = templateManager.templatesArray[0];
               if (!t?.colorPalette) { return; }
@@ -561,13 +563,31 @@ function buildOverlayMain() {
               instance.handleDisplayStatus('Enabled all colors');
             };
           }).buildElement()
-          .addButton({'id': 'bm-button-colors-disable-all', 'textContent': 'Disable All'}, (instance, button) => {
+          .addButton({'id': 'bm-button-colors-disable-all', 'textContent': 'Disable All', 'style': 'white-space: nowrap;'}, (instance, button) => {
             button.onclick = () => {
               const t = templateManager.templatesArray[0];
               if (!t?.colorPalette) { return; }
               Object.values(t.colorPalette).forEach(v => v.enabled = false);
               buildColorFilterList();
               instance.handleDisplayStatus('Disabled all colors');
+            };
+          }).buildElement()
+          .addButton({'id': 'bm-button-colors-toggle-painted', 'textContent': (hidePainted ? 'Show' : 'Hide') + ' painted', 'style': 'white-space: nowrap;'}, (instance, button) => {
+            button.onclick = () => {
+              hidePainted = !hidePainted;
+              
+              // Change button text
+              let button = document.getElementById('bm-button-colors-toggle-painted');
+              button.textContent = (hidePainted ? 'Show' : 'Hide') + ' painted';
+
+              // Save settings
+              const userSettings = JSON.parse(GM_getValue('bmUserSettings', '{}'));
+              userSettings.hidePainted = hidePainted;
+              GM.setValue('bmUserSettings', JSON.stringify(userSettings));
+
+              // Rebuild list and notify user
+              buildColorFilterList();
+              instance.handleDisplayStatus('Painted colors ' + (hidePainted ? 'hidden' : 'shown'));
             };
           }).buildElement()
         .buildElement()
@@ -615,8 +635,8 @@ function buildOverlayMain() {
         }).buildElement()
       .buildElement()
       .addTextarea({'id': overlayMain.outputStatusId, 'placeholder': `Status: Sleeping...\nVersion: ${version}`, 'readOnly': true}).buildElement()
-      .addDiv({'id': 'bm-contain-buttons-action'})
-        .addDiv()
+      .addDiv({'id': 'bm-contain-buttons-action', 'style': 'display: flex; flex-direction: row; justify-content: space-between; align-items: center;'})
+        .addDiv({'style': 'display: inline-flex; gap: 0.5ch; flex: 0 0 auto;'})
           // .addButton({'id': 'bm-button-teleport', 'className': 'bm-help', 'textContent': '✈'}).buildElement()
           // .addButton({'id': 'bm-button-favorite', 'className': 'bm-help', 'innerHTML': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="10,2 12,7.5 18,7.5 13.5,11.5 15.5,18 10,14 4.5,18 6.5,11.5 2,7.5 8,7.5" fill="white"></polygon></svg>'}).buildElement()
           // .addButton({'id': 'bm-button-templates', 'className': 'bm-help', 'innerHTML': '🖌'}).buildElement()
@@ -633,11 +653,16 @@ function buildOverlayMain() {
             });
           }).buildElement()
         .buildElement()
-        .addSmall({'textContent': 'Made by SwingTheVine', 'style': 'margin-top: auto;'}).buildElement()
+        .addDiv({'style': 'display: inline-flex; flex-direction: column; align-items: flex-end; gap: 0; flex: 0 0 auto;'})
+          .addSmall({'textContent': 'Made by SwingTheVine', 'style': 'display: block;'}).buildElement()
+          .addSmall({'textContent': 'Modded by lastforathousandyears', 'style': 'display: block;'}).buildElement()
+        .buildElement()
       .buildElement()
     .buildElement()
   .buildOverlay(document.body);
 
+
+  const expandedState = {}; // { "rgb": true/false }
   // ------- Helper: Build the color filter list -------
   window.buildColorFilterList = function buildColorFilterList() {
     const listContainer = document.querySelector('#bm-colorfilter-list');
@@ -657,6 +682,9 @@ function buildOverlayMain() {
       row.style.alignItems = 'center';
       row.style.gap = '8px';
       row.style.margin = '4px 0';
+      row.style.whiteSpace = 'nowrap';
+      row.style.overflow = 'hidden';
+      row.style.textOverflow = 'ellipsis';
 
       let swatch = document.createElement('div');
       swatch.style.width = '14px';
@@ -665,7 +693,15 @@ function buildOverlayMain() {
 
       let label = document.createElement('span');
       label.style.fontSize = '12px';
-      let labelText = `${meta.count.toLocaleString()}`;
+      // Determine painted count for this color (numerator)
+      const paintedByKey = templateManager?.colorPaintedByKey || {};
+      const paintedCount = paintedByKey[rgb] || 0;
+      const paintedStr = new Intl.NumberFormat().format(paintedCount);
+      const totalStr = new Intl.NumberFormat().format(meta.count || 0);
+      let labelText = `${paintedStr}/${totalStr}`;
+      if (paintedCount / meta.count == 1 && hidePainted) {
+        continue;
+      }
 
       // Special handling for "other" and "transparent"
       if (rgb === 'other') {
@@ -705,10 +741,41 @@ function buildOverlayMain() {
         } catch (_) {}
       });
 
+      const expandBtn = document.createElement('button');
+      expandBtn.style.fontSize = '10px';
+      expandBtn.style.padding = '2px 4px';
+      expandBtn.style.cursor = 'pointer';
+
+      const coordsBox = document.createElement('div');
+      coordsBox.style.display = expandedState[rgb] ? 'block' : 'none';
+      coordsBox.style.fontSize = '11px';
+      coordsBox.style.marginLeft = '24px';
+      coordsBox.style.whiteSpace = 'pre-wrap';
+      const aggregated = Array.from(templateManager.wrongColors?.values?.() ?? [])
+        .flatMap(innerMap => {
+          const v = innerMap.get(rgb);
+          return v ? (Array.isArray(v) ? v : [...v]) : [];
+        });
+      coordsBox.textContent = `Coordinates (100 results max):\nTl X, Tl Y | Px X, Px Y\n${
+        aggregated.length ? aggregated.slice(0, 100).join('\n') : 'no data'
+      }`;
+
+      expandBtn.textContent = coordsBox.style.display === 'none' ? '⯈' : '▼';
+
+      expandBtn.addEventListener('click', () => {
+        const isHidden = coordsBox.style.display === 'none';
+        coordsBox.style.display = isHidden ? 'block' : 'none';
+        expandBtn.textContent = isHidden ? '▼' : '⯈';
+        expandedState[rgb] = isHidden;
+      });
+
       row.appendChild(toggle);
       row.appendChild(swatch);
       row.appendChild(label);
+      row.appendChild(expandBtn);
+
       listContainer.appendChild(row);
+      listContainer.appendChild(coordsBox);
     }
   };
 
