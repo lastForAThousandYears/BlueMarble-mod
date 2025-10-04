@@ -14,7 +14,7 @@ jobs:
       - name: Check PR source branch
         run: |
           echo "Source branch: ${{ github.head_ref }}"
-          if [[ "${{ github.head_ref }}" != "documentation" && "${{ github.head_ref }}" != "code" ]]; then
-            echo "Error: PRs to main must come from 'documentation' or 'code' branches only."
+          if [[ "${{ github.head_ref }}" != "documentation" && "${{ github.head_ref }}" != "dev" ]]; then
+            echo "Error: PRs to main must come from 'documentation' or 'dev' branches only."
             exit 1
           fi
