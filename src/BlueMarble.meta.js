@@ -7,7 +7,7 @@
 // @license      MPL-2.0
 // @supportURL   https://discord.gg/tpeBPy46hf
 // @homepageURL  https://bluemarble.lol/
-// @icon         https://raw.githubusercontent.com/lastforathousandyears/BlueMarble-mod/3ba50855796ab7579ec42ac310f71203e1205b75/dist/assets/Favicon.png
+// @icon         https://raw.githubusercontent.com/lastforathousandyears/BlueMarble-mod/bd5248a503f8357a82ae7cbfdbdcf69b3309c723/dist/assets/Favicon.png
 // @updateURL    https://raw.githubusercontent.com/lastforathousandyears/BlueMarble-mod/main/dist/BlueMarble.user.js
 // @downloadURL  https://raw.githubusercontent.com/lastforathousandyears/BlueMarble-mod/main/dist/BlueMarble.user.js
 // @match        https://wplace.live/*
@@ -17,7 +17,7 @@
 // @grant        GM_getValue
 // @grant        GM_xmlhttpRequest
 // @connect      telemetry.thebluecorner.net
-// @resource     CSS-BM-File https://raw.githubusercontent.com/lastforathousandyears/BlueMarble-mod/3ba50855796ab7579ec42ac310f71203e1205b75/dist/BlueMarble.user.css
+// @resource     CSS-BM-File https://raw.githubusercontent.com/lastforathousandyears/BlueMarble-mod/bd5248a503f8357a82ae7cbfdbdcf69b3309c723/dist/BlueMarble.user.css
 // ==/UserScript==
 
 // Wplace  --> https://wplace.live
