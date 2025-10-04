@@ -3,7 +3,7 @@ description: Found a bug? Report it here!
 title: "[BUG] "
 labels: ["bug"]
 assignees: 
-  - SwingTheVine
+  - lastforathousandyears
 body:
   - type: markdown
     attributes:
