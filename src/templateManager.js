@@ -265,6 +265,10 @@ export default class TemplateManager {
       "palette": template.colorPalette // Persist palette and enabled flags
     };
 
+    this.tileProgress = new Map();
+    this.tileColorPainted = new Map();
+    this.colorPaintedByKey = {};
+    this.wrongColors = new Map();
     this.templatesArray = []; // Remove this to enable multiple templates (2/2)
     this.templatesArray.push(template); // Pushes the Template object instance to the Template Array
 
