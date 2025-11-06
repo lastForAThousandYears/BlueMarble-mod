@@ -760,12 +760,12 @@ function buildOverlayMain() {
         aggregated.length ? aggregated.slice(0, 100).join('\n') : 'no data'
       }`;
 
-      expandBtn.textContent = coordsBox.style.display === 'none' ? '⯈' : '▼';
+      expandBtn.textContent = coordsBox.style.display === 'none' ? '▶' : '▼';
 
       expandBtn.addEventListener('click', () => {
         const isHidden = coordsBox.style.display === 'none';
         coordsBox.style.display = isHidden ? 'block' : 'none';
-        expandBtn.textContent = isHidden ? '▼' : '⯈';
+        expandBtn.textContent = isHidden ? '▼' : '▶';
         expandedState[rgb] = isHidden;
       });
 

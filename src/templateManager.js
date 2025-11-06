@@ -77,11 +77,11 @@ export default class TemplateManager {
     this.worker = createWorker(function() {
       self.onmessage = function(e) {
         const { template, tilePixels, drawSize, activeTemplate, drawMult, tileKey, wrongColors } = e.data;
-        let result = heavyCountStats(template, tilePixels, drawSize, activeTemplate, drawMult, tileKey, wrongColors);
+        let result = countStats(template, tilePixels, drawSize, activeTemplate, drawMult, tileKey, wrongColors);
         self.postMessage(result);
       };
 
-      function heavyCountStats(template, tilePixels, drawSize, activeTemplate, drawMult, tileKey, wrongColors) {
+      function countStats(template, tilePixels, drawSize, activeTemplate, drawMult, tileKey, wrongColors) {
         // Per-tile painted counts by color
         const paintedByColor = new Map();
 
@@ -121,7 +121,7 @@ export default class TemplateManager {
               const isDeface = templatePixelA === 32;
               
               const keyCandidate = isDeface ? '222,250,206'
-              : `${templatePixelR},${templatePixelG},${templatePixelB}`;
+                                            : `${templatePixelR},${templatePixelG},${templatePixelB}`;
 
               const rgbKey = (activeTemplate?.allowedColorsSet && activeTemplate.allowedColorsSet.has(keyCandidate)) ? keyCandidate : 'other';
               const wrongColorArr = wrongColors?.get(rgbKey) || [];
@@ -134,7 +134,7 @@ export default class TemplateManager {
               const realPixelG = tilePixels[realPixelCenter + 1];
               const realPixelB = tilePixels[realPixelCenter + 2];
               const realPixelA = tilePixels[realPixelCenter + 3];
-              const pixel_coords = `${tileKey.split(',').join(', ')} | ${Number(template.pixelCoords[0]) + (x - 1) / drawMult}, ${Number(template.pixelCoords[1]) + (y - 1) / drawMult}`;
+              const pixel_coords = `${tileKey.replace(',', ', ')} | ${Number(template.pixelCoords[0]) + (x - 1) / drawMult}, ${Number(template.pixelCoords[1]) + (y - 1) / drawMult}`;
 
               if (isDeface && realPixelA < 64) {
                 paintedCount++;
@@ -142,16 +142,12 @@ export default class TemplateManager {
                   paintedByColor.set('222,250,206', (paintedByColor.get('222,250,206') || 0) + 1);
                 } catch (_) { /* no-op */ }
                 continue;
-              } else if (realPixelA < 64) {
-                // Unpainted
-                //if (wrongColorArr.length < 100) {
-                //  wrongColorArr.push(pixel_coords);
-                //  wrongColors.set(rgbKey, wrongColorArr);
-                //}
+              } else if (templatePixelA === 0 || realPixelA < 64) {
+                // Unpainted or transparent pixels
               } else if (realPixelR === templatePixelR && 
                 realPixelG === templatePixelG && 
                 realPixelB === templatePixelB &&
-                !isDeface // !isDeface is workaround for one bug
+                !isDeface // !isDeface is workaround for bug
               ) {
                 paintedCount++; // ...the pixel is painted correctly
                 // Track painted count for this specific color key
@@ -265,6 +261,10 @@ export default class TemplateManager {
       "palette": template.colorPalette // Persist palette and enabled flags
     };
 
+    this.tileProgress = new Map();
+    this.tileColorPainted = new Map();
+    this.colorPaintedByKey = {};
+    this.wrongColors = new Map();
     this.templatesArray = []; // Remove this to enable multiple templates (2/2)
     this.templatesArray.push(template); // Pushes the Template object instance to the Template Array
 
@@ -449,7 +449,6 @@ export default class TemplateManager {
             this.colorPaintedByKey = aggregate;
           } 
         }
-        // await this.countStats(template, tilePixels, tileCoords);
       }
       // Draw the template overlay for visual guidance, honoring color filter
       try {
@@ -547,7 +546,7 @@ export default class TemplateManager {
       const wrongStr = new Intl.NumberFormat().format(totalRequired - aggPainted); // Used to be aggWrong, but that is bugged
 
       this.overlay.handleDisplayStatus(
-        `Displaying ${templateCount} template${templateCount == 1 ? '' : 's'}.\nPainted ${paintedStr} / ${requiredStr} (${(aggPainted / totalRequired * 100).toFixed(2)}%) • Wrong ${wrongStr}`
+        `Displaying ${templateCount} template${templateCount == 1 ? '' : 's'}.\nPainted ${paintedStr} / ${requiredStr} (${(aggPainted / totalRequired * 100).toFixed(2)}%) • ${aggPainted / totalRequired === 1 ? "🎉" : "Wrong ${wrongStr}"}`
       );
       // Notify UI to refresh color list with updated per-color counts
       try { window.postMessage({ source: 'blue-marble', bmEvent: 'bm-rebuild-color-list' }, '*'); } catch (_) { /* no-op */ }
