@@ -48,13 +48,13 @@
 </table>
 
 <h1>Contributing</h1>
-<a href="https://github.com/SwingTheVine/Wplace-BlueMarble/blob/main/LICENSE.txt" target="_blank" rel="noopener noreferrer"><img alt="Software License: MPL-2.0" src="https://img.shields.io/badge/Software_License-MPL--2.0-slateblue?style=flat"></a>
+<a href="https://github.com/lastforathousandyears/BlueMarble-mod/blob/main/LICENSE.txt" target="_blank" rel="noopener noreferrer"><img alt="Software License: MPL-2.0" src="https://img.shields.io/badge/Software_License-MPL--2.0-slateblue?style=flat"></a>
 <p>
   Thank you for wanting to contribute to the userscript "Blue Marble"! It means a lot to me that someone likes my project enough to want to help it grow. If you haven't already done so, consider joining our Discord. You can ask questions about the userscript there and receive feedback. You can also visit the <a href="https://bluemarble.lol/" target="_blank" rel="noopener noreferrer">official Blue Marble website</a> for more information.
   <br>
   <b>Note</b>: If you are using AI, and you want to tell the AI how the codebase files are related to each-other, go to the <code>Class diagram of relationships for Blue Marble</code> diagram in the chart section of this file. Copy the chart, and give it to the AI.
   <br>
-  <b>Note</b>: If you are contributing to the documentation of this project, make your fork from the <code>documentation</code> branch. If you are contributing to the code/programming of this project, make your fork from the <code>code</code> branch. If you fork main, and make a PR from <code>main</code> -> <code>main</code> your PR might be rejected. This is because <code>main</code> is not up-to-date, and your changes might conflict with up-to-date changes.
+  <b>Note</b>: If you are contributing to the documentation of this project, make your fork from the <code>documentation</code> branch. If you are contributing to the code/programming of this project, make your fork from the <code>dev</code> branch. If you fork main, and make a PR from <code>main</code> -> <code>main</code> your PR might be rejected. This is because <code>main</code> is not up-to-date, and your changes might conflict with up-to-date changes.
 </p>
 
 <h2>Summary</h2>
@@ -64,7 +64,7 @@
     <li>Follow the style of the project. E.g., if all overlays are made by calling <code>Overlay()</code>, and you want to make a new overlay, you should probably call <code>Overlay()</code> as well.</li>
     <li>Low quality code will be rejected.</li>
     <li>You can find documentation for Blue Marble <a href="https://swingthevine.github.io/Wplace-BlueMarble/index.html" target="_blank" rel="noopener noreferrer">here</a>.</li>
-    <li>Don't fork the <code>main</code> branch! Fork either <code>code</code> or <code>documentation</code>.</li>
+    <li>Don't fork the <code>main</code> branch! Fork either <code>dev</code> or <code>documentation</code>.</li>
     <li>If you are adding a new feature, and it is feasable to stick your feature inside a function, then use a function. This will make your code conflict less with other people's code. Make your code <a href="https://en.wikipedia.org/wiki/Modular_programming" target="_blank" rel="noopener noreferrer">modular</a>.</li>
   </ul>
 </p>
@@ -103,7 +103,7 @@
 
 <h2>What Can I Not Do?</h2>
 <p>
-  Please do not use <a href="https://github.com/SwingTheVine/Wplace-BlueMarble/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a> for asking support questions (e.g. "How do I install this?" or "What does <code>cssMangler</code> do?"). We use the GitHub issue tracker for bug reports and feature requests. If you are having trouble and need help, ask on our <a href="https://discord.gg/tpeBPy46hf" target="_blank" rel="noopener noreferrer">Discord</a>. <b>However, you <i>should</i> make a feature request on our issue tracker before starting work on your contribution.</b> Nothing sucks more than working hard on a high-quality contribution just for it to be rejected because it does not align with the mission of the mod. Ask first!
+  Please do not use <a href="https://github.com/lastforathousandyears/BlueMarble-mod/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a> for asking support questions (e.g. "How do I install this?" or "What does <code>cssMangler</code> do?"). We use the GitHub issue tracker for bug reports and feature requests. If you are having trouble and need help, ask on our <a href="https://discord.gg/tpeBPy46hf" target="_blank" rel="noopener noreferrer">Discord</a>. <b>However, you <i>should</i> make a feature request on our issue tracker before starting work on your contribution.</b> Nothing sucks more than working hard on a high-quality contribution just for it to be rejected because it does not align with the mission of the mod. Ask first!
 </p>
 <p>
   Please contribute in good faith. We will reject pull requests with bad code, comments, or pull requests that damage the mod. 
@@ -111,8 +111,8 @@
 
 <h2>Guidelines</h2>
 <ul>
-  <li>Always submit a <a href="https://github.com/SwingTheVine/Wplace-BlueMarble/issues/new/choose" target="_blank" rel="noopener noreferrer">feature request</a> and receive authorization to work on your contribution <i>before</i> you start working on your contribution. This will save you time if we end up rejecting the contribution. Small contributions (like fixing spelling errors) don't need a feature request.</li>
-  <li>Follow the <a href="https://github.com/SwingTheVine/.github/blob/main/CODE_OF_CONDUCT.md" target="_blank" rel="noopener noreferrer">Code of Conduct</a>. This includes both your contributions and the way you interact with this community.</li>
+  <li>Always submit a <a href="https://github.com/lastforathousandyears/BlueMarble-mod/issues/new/choose" target="_blank" rel="noopener noreferrer">feature request</a> and receive authorization to work on your contribution <i>before</i> you start working on your contribution. This will save you time if we end up rejecting the contribution. Small contributions (like fixing spelling errors) don't need a feature request.</li>
+  <li>Follow the <a href="https://github.com/lastforathousandyears/.github/blob/main/CODE_OF_CONDUCT.md" target="_blank" rel="noopener noreferrer">Code of Conduct</a>. This includes both your contributions and the way you interact with this community.</li>
   <li>Always write a clear message that explains the changes. "Added some things" does <i>not</i> explain what was changed.</li>
   <li>Different feature, different pull request. If you submit a pull request for templates and localization (i18n) together, and we want to reject the localization, your template code is rejected along with the localization since they are the same pull request. They should be separate pull requests since they are separate features.</li>
   <li>The file structure must be maintained (unless you were authorized to change it). For example, all code should go in `src/` and all code affecting the overlay should go in the Overlay class file.</li>
@@ -138,8 +138,8 @@
 <h2>How To Contribute</h2>
 <p>
   <ol>
-    <li>Read all of the <a href="https://github.com/SwingTheVine/Wplace-BlueMarble/blob/main/docs/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">contributing guidelines</a>.</li>
-    <li>If you would like to contribute, submit a request <a href="https://github.com/SwingTheVine/Wplace-BlueMarble/issues/new/choose" target="_blank" rel="noopener noreferrer">here</a>.</li>
+    <li>Read all of the <a href="https://github.com/lastforathousandyears/BlueMarble-mod/blob/main/docs/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">contributing guidelines</a>.</li>
+    <li>If you would like to contribute, submit a request <a href="https://github.com/lastforathousandyears/BlueMarble-mod/issues/new/choose" target="_blank" rel="noopener noreferrer">here</a>.</li>
     <li>If you have received authorization to start working on your contribution, set up the development environment on your device.</li>
     <li>Fork the project.</li>
     <li>Download your fork to the development environment.</li>
