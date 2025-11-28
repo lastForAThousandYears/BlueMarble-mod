@@ -55,7 +55,7 @@ export default class TemplateManager {
     this.encodingBase = '!#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~'; // Characters to use for encoding/decoding
     this.tileSize = 1000; // The number of pixels in a tile. Assumes the tile is square
     this.drawMult = 3; // The enlarged size for each pixel. E.g. when "3", a 1x1 pixel becomes a 1x1 pixel inside a 3x3 area. MUST BE ODD
-    
+
     // Template
     this.canvasTemplate = null; // Our canvas
     this.canvasTemplateZoomed = null; // The template when zoomed out
@@ -74,8 +74,8 @@ export default class TemplateManager {
 
     this.wrongColors = new Map();
 
-    this.worker = createWorker(function() {
-      self.onmessage = function(e) {
+    this.worker = createWorker(function () {
+      self.onmessage = function (e) {
         const { template, tilePixels, drawSize, activeTemplate, drawMult, tileKey, wrongColors } = e.data;
         let result = countStats(template, tilePixels, drawSize, activeTemplate, drawMult, tileKey, wrongColors);
         self.postMessage(result);
@@ -89,7 +89,7 @@ export default class TemplateManager {
         let paintedCount = 0;
         let wrongCount = 0;
         let requiredCount = 0;
-        
+
         try {
           const tempWidth = template.bitmap.width;
           const tempHeight = template.bitmap.height;
@@ -119,9 +119,9 @@ export default class TemplateManager {
                 templatePixelR, templatePixelG, templatePixelB, templatePixelA
               ] = tData.slice(templatePixelCenter, templatePixelCenter + 4); // Shread block's center pixel's RED value
               const isDeface = templatePixelA === 32;
-              
+
               const keyCandidate = isDeface ? '222,250,206'
-                                            : `${templatePixelR},${templatePixelG},${templatePixelB}`;
+                : `${templatePixelR},${templatePixelG},${templatePixelB}`;
 
               const rgbKey = (activeTemplate?.allowedColorsSet && activeTemplate.allowedColorsSet.has(keyCandidate)) ? keyCandidate : 'other';
               const wrongColorArr = wrongColors?.get(rgbKey) || [];
@@ -142,10 +142,10 @@ export default class TemplateManager {
                   paintedByColor.set('222,250,206', (paintedByColor.get('222,250,206') || 0) + 1);
                 } catch (_) { /* no-op */ }
                 continue;
-              } else if (templatePixelA === 0 || realPixelA < 64) {
+              } else if (templatePixelA === 0 && realPixelA < 64) {
                 // Unpainted or transparent pixels
-              } else if (realPixelR === templatePixelR && 
-                realPixelG === templatePixelG && 
+              } else if (realPixelR === templatePixelR &&
+                realPixelG === templatePixelG &&
                 realPixelB === templatePixelB &&
                 !isDeface // !isDeface is workaround for bug
               ) {
@@ -181,11 +181,11 @@ export default class TemplateManager {
   /* @__PURE__ */getCanvas() {
 
     // If the stored canvas is "fresh", return the stored canvas
-    if (document.body.contains(this.canvasTemplate)) {return this.canvasTemplate;}
+    if (document.body.contains(this.canvasTemplate)) { return this.canvasTemplate; }
     // Else, the stored canvas is "stale", get the canvas again
 
     // Attempt to find and destroy the "stale" canvas
-    document.getElementById(this.canvasTemplateID)?.remove(); 
+    document.getElementById(this.canvasTemplateID)?.remove();
 
     const canvasMain = document.querySelector(this.canvasMainID);
 
@@ -233,7 +233,7 @@ export default class TemplateManager {
   async createTemplate(blob, name, coords) {
 
     // Creates the JSON object if it does not already exist
-    if (!this.templatesJSON) {this.templatesJSON = await this.createJSON(); console.log(`Creating JSON...`);}
+    if (!this.templatesJSON) { this.templatesJSON = await this.createJSON(); console.log(`Creating JSON...`); }
 
     this.overlay.handleDisplayStatus(`Creating template at ${coords.join(', ')}...`);
 
@@ -315,7 +315,7 @@ export default class TemplateManager {
   async disableTemplate() {
 
     // Creates the JSON object if it does not already exist
-    if (!this.templatesJSON) {this.templatesJSON = await this.createJSON(); console.log(`Creating JSON...`);}
+    if (!this.templatesJSON) { this.templatesJSON = await this.createJSON(); console.log(`Creating JSON...`); }
 
 
   }
@@ -329,7 +329,7 @@ export default class TemplateManager {
   async drawTemplateOnTile(tileBlob, tileCoords) {
 
     // Returns early if no templates should be drawn
-    if (!this.templatesShouldBeDrawn) {return tileBlob;}
+    if (!this.templatesShouldBeDrawn) { return tileBlob; }
 
     const drawSize = this.tileSize * this.drawMult; // Calculate draw multiplier for scaling
 
@@ -342,7 +342,7 @@ export default class TemplateManager {
     console.log(templateArray);
 
     // Sorts the array of Template class instances. 0 = first = lowest draw priority
-    templateArray.sort((a, b) => {return a.sortID - b.sortID;});
+    templateArray.sort((a, b) => { return a.sortID - b.sortID; });
 
     console.log(templateArray);
 
@@ -365,7 +365,7 @@ export default class TemplateManager {
           tile.startsWith(tileCoords)
         );
 
-        if (matchingTiles.length === 0) {return null;} // Return null when nothing is found
+        if (matchingTiles.length === 0) { return null; } // Return null when nothing is found
 
         // Retrieves the blobs of the templates for this tile
         const matchingTileBlobs = matchingTiles.map(tile => {
@@ -381,7 +381,7 @@ export default class TemplateManager {
 
         return matchingTileBlobs?.[0];
       })
-    .filter(Boolean);
+      .filter(Boolean);
 
     console.log(templatesToDraw);
 
@@ -426,7 +426,7 @@ export default class TemplateManager {
         const wrongColors = new Map();
         this.worker.postMessage({ template, tilePixels, drawSize, activeTemplate, drawMult, tileKey, wrongColors });
         this.worker.onmessage = e => {
-          let {paintedCount, requiredCount, wrongCount, paintedByColor, tileKey, wrongColors} = e.data;
+          let { paintedCount, requiredCount, wrongCount, paintedByColor, tileKey, wrongColors } = e.data;
 
           // Save per-tile stats and compute global aggregates across all processed tiles
           if (templateCount > 0) {
@@ -447,7 +447,7 @@ export default class TemplateManager {
               }
             }
             this.colorPaintedByKey = aggregate;
-          } 
+          }
         }
       }
       // Draw the template overlay for visual guidance, honoring color filter
@@ -637,11 +637,11 @@ export default class TemplateManager {
                     //console.log(`${a}`);
                     if (a === 0) { continue; }
                     // if (r === 222 && g === 250 && b === 206) { continue; }
-                    const key = a === 32 ? 
+                    const key = a === 32 ?
                       '222,250,206' // #deface
-                    : 
+                      :
                       Object.hasOwn(templates[templateKey].palette, `${r},${g},${b}`) ? `${r},${g},${b}` : "other";
-                    
+
                     paletteMap.set(key, (paletteMap.get(key) || 0) + 1);
                     requiredPixelCount++;
                   }
@@ -668,7 +668,7 @@ export default class TemplateManager {
           for (const [key, count] of paletteMap.entries()) { paletteObj[key] = { count, enabled: true }; }
           template.colorPalette = paletteObj;
           // Populate tilePrefixes for fast-scoping
-          try { Object.keys(templateTiles).forEach(k => { template.tilePrefixes?.add(k.split(',').slice(0,2).join(',')); }); } catch (_) {}
+          try { Object.keys(templateTiles).forEach(k => { template.tilePrefixes?.add(k.split(',').slice(0, 2).join(',')); }); } catch (_) { }
           // Merge persisted palette (enabled/disabled) if present
           try {
             const persisted = templates?.[templateKey]?.palette;
@@ -681,7 +681,7 @@ export default class TemplateManager {
                 }
               }
             }
-          } catch (_) {}
+          } catch (_) { }
           // Store storageKey for later writes
           template.storageKey = templateKey;
           this.templatesArray.push(template);
