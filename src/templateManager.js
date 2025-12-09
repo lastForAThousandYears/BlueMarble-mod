@@ -147,6 +147,7 @@ export default class TemplateManager {
               } else if (realPixelR === templatePixelR &&
                 realPixelG === templatePixelG &&
                 realPixelB === templatePixelB &&
+                realPixelA >= 64 &&
                 !isDeface // !isDeface is workaround for bug
               ) {
                 paintedCount++; // ...the pixel is painted correctly
