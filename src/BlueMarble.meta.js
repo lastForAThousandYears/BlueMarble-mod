@@ -18,6 +18,7 @@
 // @grant        GM_xmlhttpRequest
 // @connect      telemetry.thebluecorner.net
 // @resource     CSS-BM-File https://raw.githubusercontent.com/lastforathousandyears/BlueMarble-mod/8a3417dd9b1d9e8647d48216ebe0f64c42e3a16b/dist/BlueMarble.user.css
+// @noframes
 // ==/UserScript==
 
 // Wplace  --> https://wplace.live

@@ -108,7 +108,7 @@ export default class ApiManager {
                 displayCoords.id = 'bm-display-coords';
                 displayCoords.textContent = text;
                 displayCoords.style = 'margin-left: calc(var(--spacing)*3); font-size: small;';
-                element.parentNode.parentNode.insertAdjacentElement('afterend', displayCoords);
+                element.parentNode.parentNode.parentNode.insertAdjacentElement('afterend', displayCoords);
               } else {
                 displayCoords.textContent = text;
               }
@@ -116,8 +116,7 @@ export default class ApiManager {
           }
           break;
         
-        case 'tiles':
-
+        case 'tile':
           // Runs only if the tile has the template
           let tileCoordsTile = data['endpoint'].split('/');
           tileCoordsTile = [parseInt(tileCoordsTile[tileCoordsTile.length - 2]), parseInt(tileCoordsTile[tileCoordsTile.length - 1].replace('.png', ''))];
