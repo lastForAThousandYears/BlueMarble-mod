@@ -116,6 +116,7 @@ export default class ApiManager {
           }
           break;
         
+        case 'tiles':
         case 'tile':
           // Runs only if the tile has the template
           let tileCoordsTile = data['endpoint'].split('/');
